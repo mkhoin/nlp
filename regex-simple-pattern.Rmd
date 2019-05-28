@@ -53,13 +53,15 @@ for r in readings:
 ``` {r r-read-data}
 library(tidyverse)
 
-file_lst <- list.files(path="data/", pattern = "txt$")
+file_lst <- list("data/notebook-1.txt", "data/notebook-2.txt")
 
-readings <- map(paste0("data/", file_lst) , read_lines) %>% unlist
+readings <- map(file_lst , read_lines, skip=1, n_max=6) %>% unlist
 
 for(i in 1:length(readings)) {
   cat(readings[i], "\n")
 }
+
+? read_lines
 ```
 
 

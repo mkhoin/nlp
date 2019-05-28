@@ -1720,29 +1720,26 @@ Pertwee/Sept 3, 2010/3981.0</code></pre>
 <p><strong>R 코드</strong></p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(tidyverse)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">file_lst &lt;-<span class="st"> </span><span class="kw">list.files</span>(<span class="dt">path=</span><span class="st">&quot;data/&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;txt$&quot;</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">file_lst &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;data/notebook-1.txt&quot;</span>, <span class="st">&quot;data/notebook-2.txt&quot;</span>)</a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">readings &lt;-<span class="st"> </span><span class="kw">map</span>(<span class="kw">paste0</span>(<span class="st">&quot;data/&quot;</span>, file_lst) , read_lines) <span class="op">%&gt;%</span><span class="st"> </span>unlist</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">readings &lt;-<span class="st"> </span><span class="kw">map</span>(file_lst , read_lines, <span class="dt">skip=</span><span class="dv">1</span>, <span class="dt">n_max=</span><span class="dv">6</span>) <span class="op">%&gt;%</span><span class="st"> </span>unlist</a>
 <a class="sourceLine" id="cb3-6" data-line-number="6"></a>
 <a class="sourceLine" id="cb3-7" data-line-number="7"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
 <a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
 <a class="sourceLine" id="cb3-9" data-line-number="9">}</a></code></pre></div>
-<pre><code>Baker 1     2009-11-17  1223.0 
-Baker 1     2010-06-24  1122.7 
+<pre><code>Baker 1     2010-06-24  1122.7 
 Baker 2     2009-07-24  2819.0 
 Baker 2     2010-08-25  2971.6 
 Baker 1     2011-01-05  1410.0 
 Baker 2     2010-09-04  4671.6 
 Baker 2     2011-02-19  3423.9 
-Baker 1     2009-05-03  1246.2 
-Davison/May 23, 2010/1724.7 
 Pertwee/May 24, 2010/2103.8 
 Davison/June 19, 2010/1731.9 
 Davison/July 6, 2010/2010.7 
 Pertwee/Aug 4 2010/1731.3 
 Davison/Apr 22, 201/2122.2 
-Pertwee/Sept 3, 2010/3981.0 
-Davison/Sep , 2010/2121.6 </code></pre>
+Pertwee/Sept 3, 2010/3981.0 </code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">? read_lines</a></code></pre></div>
 </div>
 </div>
 <p>상기 프로그램을 실행하면, 첫번째 데이터 파일에서 6줄, 두번째 데이터 파일에서 6줄을 <code>readings</code> 리스트로 저장한다:</p>
@@ -1755,18 +1752,18 @@ Davison/Sep , 2010/2121.6 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">    <span class="cf">if</span> <span class="st">'06'</span> <span class="kw">in</span> r:</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">    <span class="cf">if</span> <span class="st">'06'</span> <span class="kw">in</span> r:</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>)) {</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">    <span class="kw">cat</span>(readings[i])</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">  }</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>)) {</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">    <span class="kw">cat</span>(readings[i])</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">  }</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">}</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7</code></pre>
 </div>
 </div>
@@ -1774,19 +1771,19 @@ Davison/Sep , 2010/2121.6 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">    <span class="cf">if</span> (<span class="st">'06'</span> <span class="kw">in</span> r) <span class="kw">or</span> (<span class="st">'07'</span> <span class="kw">in</span> r):</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2">    <span class="cf">if</span> (<span class="st">'06'</span> <span class="kw">in</span> r) <span class="kw">or</span> (<span class="st">'07'</span> <span class="kw">in</span> r):</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7
 Baker 2     2009-07-24  2819.0</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>) <span class="op">|</span><span class="st"> </span><span class="kw">str_detect</span>(readings[i], <span class="st">&quot;07&quot;</span>)) {</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">  }</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>) <span class="op">|</span><span class="st"> </span><span class="kw">str_detect</span>(readings[i], <span class="st">&quot;07&quot;</span>)) {</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">  }</a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">}</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7 
 Baker 2     2009-07-24  2819.0 </code></pre>
 </div>
@@ -1796,22 +1793,22 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="im">import</span> re</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">    <span class="cf">if</span> re.search(<span class="st">'06'</span>, r):</a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">        <span class="bu">print</span>( r )</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="im">import</span> re</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
+<a class="sourceLine" id="cb14-4" data-line-number="4">    <span class="cf">if</span> re.search(<span class="st">'06'</span>, r):</a>
+<a class="sourceLine" id="cb14-5" data-line-number="5">        <span class="bu">print</span>( r )</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(stringr)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
-<a class="sourceLine" id="cb15-4" data-line-number="4">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>)) {</a>
-<a class="sourceLine" id="cb15-5" data-line-number="5">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb15-6" data-line-number="6">  }</a>
-<a class="sourceLine" id="cb15-7" data-line-number="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">library</span>(stringr)</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06&quot;</span>)) {</a>
+<a class="sourceLine" id="cb16-5" data-line-number="5">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb16-6" data-line-number="6">  }</a>
+<a class="sourceLine" id="cb16-7" data-line-number="7">}</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7 </code></pre>
 </div>
 </div>
@@ -1820,19 +1817,19 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
-<a class="sourceLine" id="cb17-2" data-line-number="2">    <span class="cf">if</span> re.search(<span class="st">'06|07'</span>, r):</a>
-<a class="sourceLine" id="cb17-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="cf">for</span> r <span class="kw">in</span> readings:</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">    <span class="cf">if</span> re.search(<span class="st">'06|07'</span>, r):</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">        <span class="bu">print</span>( r )</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7
 Baker 2     2009-07-24  2819.0</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06|07&quot;</span>)) {</a>
-<a class="sourceLine" id="cb19-3" data-line-number="3">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb19-4" data-line-number="4">  }</a>
-<a class="sourceLine" id="cb19-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(readings)) {</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">  <span class="cf">if</span>(<span class="kw">str_detect</span>(readings[i], <span class="st">&quot;06|07&quot;</span>)) {</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">    <span class="kw">cat</span>(readings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb20-4" data-line-number="4">  }</a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">}</a></code></pre></div>
 <pre><code>Baker 1     2010-06-24  1122.7 
 Baker 2     2009-07-24  2819.0 </code></pre>
 </div>
@@ -1842,31 +1839,31 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="kw">def</span> show_matches(pattern, strings):</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">    <span class="cf">for</span> s <span class="kw">in</span> strings:</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3">        <span class="cf">if</span> re.search(pattern, s):</a>
-<a class="sourceLine" id="cb21-4" data-line-number="4">            <span class="bu">print</span>( <span class="st">'**'</span>, s )</a>
-<a class="sourceLine" id="cb21-5" data-line-number="5">        <span class="cf">else</span>:</a>
-<a class="sourceLine" id="cb21-6" data-line-number="6">            <span class="bu">print</span>( <span class="st">'  '</span>, s )</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">def</span> show_matches(pattern, strings):</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">    <span class="cf">for</span> s <span class="kw">in</span> strings:</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">        <span class="cf">if</span> re.search(pattern, s):</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">            <span class="bu">print</span>( <span class="st">'**'</span>, s )</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">        <span class="cf">else</span>:</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6">            <span class="bu">print</span>( <span class="st">'  '</span>, s )</a></code></pre></div>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">show_matches &lt;-<span class="st"> </span><span class="cf">function</span>(pattern, strings) {</a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(strings)) {</a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">    <span class="cf">if</span>(<span class="kw">str_detect</span>(strings[i], pattern)) {</a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">      <span class="kw">cat</span>(<span class="st">'**'</span>, strings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5">    } <span class="cf">else</span> {</a>
-<a class="sourceLine" id="cb22-6" data-line-number="6">      <span class="kw">cat</span>(<span class="st">'  '</span>, strings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
-<a class="sourceLine" id="cb22-7" data-line-number="7">    }</a>
-<a class="sourceLine" id="cb22-8" data-line-number="8">  }</a>
-<a class="sourceLine" id="cb22-9" data-line-number="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">show_matches &lt;-<span class="st"> </span><span class="cf">function</span>(pattern, strings) {</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(strings)) {</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">    <span class="cf">if</span>(<span class="kw">str_detect</span>(strings[i], pattern)) {</a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">      <span class="kw">cat</span>(<span class="st">'**'</span>, strings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">    } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">      <span class="kw">cat</span>(<span class="st">'  '</span>, strings[i], <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">    }</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">  }</a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">}</a></code></pre></div>
 </div>
 </div>
 <p>상기 함수를 앞에서 불러 읽은 데이터에 <code>'06|07'</code> 패턴과 매칭시키면, <code>'06'</code> 월 혹은 <code>'07'</code> 월을 갖는 두 레코드 옆에 별을 함께 출력한다:</p>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb23-1" data-line-number="1">show_matches(<span class="st">'06|07'</span>, readings)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb24-1" data-line-number="1">show_matches(<span class="st">'06|07'</span>, readings)</a></code></pre></div>
 <pre><code>** Baker 1      2010-06-24  1122.7
 ** Baker 2      2009-07-24  2819.0
    Baker 2      2010-08-25  2971.6
@@ -1882,30 +1879,26 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">show_matches</span>(<span class="st">'06|07'</span>, readings)</a></code></pre></div>
-<pre><code>   Baker 1      2009-11-17  1223.0 
-** Baker 1      2010-06-24  1122.7 
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">show_matches</span>(<span class="st">'06|07'</span>, readings)</a></code></pre></div>
+<pre><code>** Baker 1      2010-06-24  1122.7 
 ** Baker 2      2009-07-24  2819.0 
    Baker 2      2010-08-25  2971.6 
    Baker 1      2011-01-05  1410.0 
    Baker 2      2010-09-04  4671.6 
    Baker 2      2011-02-19  3423.9 
-   Baker 1      2009-05-03  1246.2 
-   Davison/May 23, 2010/1724.7 
    Pertwee/May 24, 2010/2103.8 
    Davison/June 19, 2010/1731.9 
    Davison/July 6, 2010/2010.7 
    Pertwee/Aug 4 2010/1731.3 
    Davison/Apr 22, 201/2122.2 
-   Pertwee/Sept 3, 2010/3981.0 
-   Davison/Sep , 2010/2121.6 </code></pre>
+   Pertwee/Sept 3, 2010/3981.0 </code></pre>
 </div>
 </div>
 <p>하지만, 패턴 <code>'06|7'</code>로 변경시키면(‘7’ 앞에 ’0’이 없음), <code>'06'</code> 월 혹은 <code>'07'</code> 월을 갖지 않는 레코드를 많이 패칭하는 것으로 보인다.</p>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb27-1" data-line-number="1">show_matches(<span class="st">'06|7'</span>, readings)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb28-1" data-line-number="1">show_matches(<span class="st">'06|7'</span>, readings)</a></code></pre></div>
 <pre><code>** Baker 1      2010-06-24  1122.7
 ** Baker 2      2009-07-24  2819.0
 ** Baker 2      2010-08-25  2971.6
@@ -1921,23 +1914,19 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">show_matches</span>(<span class="st">'06|7'</span>, readings)</a></code></pre></div>
-<pre><code>** Baker 1      2009-11-17  1223.0 
-** Baker 1      2010-06-24  1122.7 
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">show_matches</span>(<span class="st">'06|7'</span>, readings)</a></code></pre></div>
+<pre><code>** Baker 1      2010-06-24  1122.7 
 ** Baker 2      2009-07-24  2819.0 
 ** Baker 2      2010-08-25  2971.6 
    Baker 1      2011-01-05  1410.0 
 ** Baker 2      2010-09-04  4671.6 
    Baker 2      2011-02-19  3423.9 
-   Baker 1      2009-05-03  1246.2 
-** Davison/May 23, 2010/1724.7 
    Pertwee/May 24, 2010/2103.8 
 ** Davison/June 19, 2010/1731.9 
 ** Davison/July 6, 2010/2010.7 
 ** Pertwee/Aug 4 2010/1731.3 
    Davison/Apr 22, 201/2122.2 
-   Pertwee/Sept 3, 2010/3981.0 
-   Davison/Sep , 2010/2121.6 </code></pre>
+   Pertwee/Sept 3, 2010/3981.0 </code></pre>
 </div>
 </div>
 <p>원인을 이해하기 위해서, 예전에 배운 수학을 생각해보자. 수식 <em>ab+c</em> 는 “a 곱하기 b, 더하기 c”로, 곱셈이 덧셈보다 연산 우선순위를 갖는다. 만약 다른 의미로 계산을 하려면, 괄호를 사용해서 <em>a(b+c)</em> 와 같이 작성해야 된다.</p>
@@ -1952,15 +1941,15 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb31-1" data-line-number="1">match <span class="op">=</span> re.search(<span class="st">'(2009|2010|2011)'</span>,</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">                   <span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>)</a>
-<a class="sourceLine" id="cb31-3" data-line-number="3"><span class="bu">print</span>( match.group(<span class="dv">1</span>) )</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb32-1" data-line-number="1">match <span class="op">=</span> re.search(<span class="st">'(2009|2010|2011)'</span>,</a>
+<a class="sourceLine" id="cb32-2" data-line-number="2">                   <span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>)</a>
+<a class="sourceLine" id="cb32-3" data-line-number="3"><span class="bu">print</span>( match.group(<span class="dv">1</span>) )</a></code></pre></div>
 <pre><code>2009</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">str_match &lt;-<span class="st"> </span><span class="kw">str_match</span>(<span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>, <span class="st">'(2009|2010|2011)'</span>)</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">str_match[,<span class="dv">2</span>]</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1">str_match &lt;-<span class="st"> </span><span class="kw">str_match</span>(<span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>, <span class="st">'(2009|2010|2011)'</span>)</a>
+<a class="sourceLine" id="cb34-2" data-line-number="2">str_match[,<span class="dv">2</span>]</a></code></pre></div>
 <pre><code>[1] &quot;2009&quot;</code></pre>
 </div>
 </div>
@@ -1976,15 +1965,15 @@ Baker 2     2009-07-24  2819.0 </code></pre>
 <div class="row">
 <div class="col-md-6">
 <p><strong>파이썬 코드</strong></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb35-1" data-line-number="1">match <span class="op">=</span> re.search(<span class="st">'(....)-(..)-(..)'</span>,</a>
-<a class="sourceLine" id="cb35-2" data-line-number="2">                   <span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>)</a>
-<a class="sourceLine" id="cb35-3" data-line-number="3"><span class="bu">print</span>( match.group(<span class="dv">1</span>), match.group(<span class="dv">2</span>), match.group(<span class="dv">3</span>) )</a></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb36-1" data-line-number="1">match <span class="op">=</span> re.search(<span class="st">'(....)-(..)-(..)'</span>,</a>
+<a class="sourceLine" id="cb36-2" data-line-number="2">                   <span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>)</a>
+<a class="sourceLine" id="cb36-3" data-line-number="3"><span class="bu">print</span>( match.group(<span class="dv">1</span>), match.group(<span class="dv">2</span>), match.group(<span class="dv">3</span>) )</a></code></pre></div>
 <pre><code>2009 11 17</code></pre>
 </div>
 <div class="col-md-6">
 <p><strong>R 코드</strong></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">date_match &lt;-<span class="st"> </span><span class="kw">str_match</span>(<span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>, <span class="st">'(....)-(..)-(..)'</span>)</a>
-<a class="sourceLine" id="cb37-2" data-line-number="2"><span class="kw">cat</span>(date_match[,<span class="dv">2</span>], <span class="st">&quot;-&quot;</span>, date_match[,<span class="dv">3</span>], <span class="st">&quot;-&quot;</span>, date_match[,<span class="dv">4</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1">date_match &lt;-<span class="st"> </span><span class="kw">str_match</span>(<span class="st">'Baker 1</span><span class="ch">\t</span><span class="st">2009-11-17</span><span class="ch">\t</span><span class="st">1223.0'</span>, <span class="st">'(....)-(..)-(..)'</span>)</a>
+<a class="sourceLine" id="cb38-2" data-line-number="2"><span class="kw">cat</span>(date_match[,<span class="dv">2</span>], <span class="st">&quot;-&quot;</span>, date_match[,<span class="dv">3</span>], <span class="st">&quot;-&quot;</span>, date_match[,<span class="dv">4</span>])</a></code></pre></div>
 <pre><code>2009 - 11 - 17</code></pre>
 </div>
 </div>
