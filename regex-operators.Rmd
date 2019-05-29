@@ -99,6 +99,10 @@ Notebook 2 파일에서 데이터를 추출하는 정규표현식 사용법을 �
 이 제약조건으로 `.*`를 세번 사용해서 사이트명, 날짜, 측정값을 매칭할 수 있다.
 물론, 결과는 다음과 같다:
 
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ``` {python python-operator}
 import re 
 
@@ -110,9 +114,33 @@ print( match.group(3) )
 ```
 
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operator}
+library(stringr)
+
+match <- str_match('Davison/May 22, 2010/1721.3', '(.*)/(.*)/(.*)')
+
+match[,2]
+match[,3]
+match[,4]
+
+```
+
+  </div>
+</div>
+
+
+
 불행하게도, 너무나도 사용자를 배려하지 않았다.
 출력결과 각 그룹집단마다 꺾쇠 괄호를 쳐서 매칭된 것을 보기 쉽게하고 나서,
 `'//'` 문자열에 동일한 패턴을 매칭하자.
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ``` {python python-operator-format-2}
 match = re.search('(.*)/(.*)/(.*)',
@@ -120,8 +148,23 @@ match = re.search('(.*)/(.*)/(.*)',
 print('[' + match.group(1) + ']')
 print('[' + match.group(2) + ']')
 print('[' + match.group(3) + ']')
-
 ```
+
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operator-format}
+match <- str_match('//', '(.*)/(.*)/(.*)')
+
+cat("[", match[,2], "]\n")
+cat("[", match[,3], "]\n")
+cat("[", match[,4], "]\n")
+```
+
+  </div>
+</div>
+
 
 작성된 패턴이 위와 같은 적법하지 않는 레코드에 매칭시키고 싶지는 않다.
 ("Fail early, fail often" 원칙을 기억하라)
@@ -132,20 +175,40 @@ print('[' + match.group(3) + ']')
 `+`도 후위 연산자로 "하나 혹은 그이상" 의미를 담고 있다.
 즉, 후위연산자 앞에 오는 패턴이 적어도 1회 매칭되어야만 된다.
 
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ``` {python python-operator-format}
 match = re.search('(.+)/(.+)/(.+)',
                   '//')
 print(match)
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operator-format2}
+match <- str_match('//', '(.*)/(.*)/(.*)')
+
+match
+```
+
+  </div>
+</div>
+
+
 보시다시피, `(.+)/(.+)/(.+)` 패턴은 슬래쉬만 담긴 문자열은 매칭하지 *않는다*.
 왜냐하면, 슬래쉬 다음에 혹은 앞에, 사이에 문자가 없기 때문이다.
 다시 거슬러 올라가서 적법한 데이터에 적용시키면,
 올바르게 작업하는 것처럼 보인다:
 
-``` {python python-operators}
-import re
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
+``` {python python-operators}
 m = re.search('(.+)/(.+)/(.+)', 'Davison/May 22, 2010/1721.3')
 
 print('[' + m.group(1) + ']')
@@ -153,9 +216,29 @@ print('[' + m.group(2) + ']')
 print('[' + m.group(3) + ']')
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operators}
+match <- str_match('Davison/May 22, 2010/1721.3', '(.*)/(.*)/(.*)')
+
+cat("[", match[,2], "]\n")
+cat("[", match[,3], "]\n")
+cat("[", match[,4], "]\n")
+```
+
+  </div>
+</div>
+
+
 문자열 다수에 많은 패턴을 패칭할 예정이라,
 함수로 작성해서 패턴을 텍스트에 적용시키고, 매칭되는지 되지 않는지 
 출력하고 나서, 매칭되는 것이 있다면 매칭되는 그룹집단을 출력한다.
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ``` {python python-operator-function}
 def show_groups(pattern, text):
@@ -167,33 +250,125 @@ def show_groups(pattern, text):
         print('%2d: %s' % (i, m.group(i)))
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operator-function}
+show_groups <- function(pattern, text) {
+  
+    m <- str_match(text, pattern)
+    
+    if (is.na(m[,1])) {
+      return('NO MATCH')
+    }
+        
+    for(i in 2:ncol(m)) {
+      cat(i-1, ":", m[, i], "\n")
+    }
+}
+
+```
+
+  </div>
+</div>
+
+
 방금 전에 사용한 레코드 두개에 대해 작성한 함수를 테스트해 본다:
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ``` {python python-operator-function-run}
 show_groups('(.+)/(.+)/(.+)',
             'Davison/May 22, 2010/1721.3')
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+``` {r r-operator-function-run}
+show_groups('(.+)/(.+)/(.+)',
+            'Davison/May 22, 2010/1721.3')
+```
+
+  </div>
+</div>
+
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ```{python python-operator-function-run-none}
 show_groups('(.+)/(.+)/(.+)',
             '//')
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-function-run-none}
+show_groups('(.+)/(.+)/(.+)',
+            '//')
+```
+
+  </div>
+</div>
+
+
+
 좋아요: 정규표현식을 사용해서 장소명, 날짜 측정값을 추출했으면,
 패턴을 더 추가해서 날짜에 대해 날짜를 더 쪼개는 것은 어떤가요?
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-funciton-extened}
 show_groups('(.+)/(.+) (.+), (.+)/(.+)',
             'Davison/May 22, 2010/1721.3')
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-funciton-extened}
+show_groups('(.+)/(.+) (.+), (.+)/(.+)',
+            'Davison/May 22, 2010/1721.3')
+```
+
+  </div>
+</div>
 
 하지만, 잠시만: 왜 동작하지 않을까요?
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-funciton-extened-run}
 show_groups('(.+)/(.+) (.+), (.+)/(.+)',
             'Davison/May 22 2010/1721.3')
 ```
+
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-funciton-extened-run}
+show_groups('(.+)/(.+) (.+), (.+)/(.+)',
+            'Davison/May 22 2010/1721.3')
+```
+
+
+  </div>
+</div>
+
 
 문제는 매칭하려는 문자열이 날짜 뒤에 콤마가 없기 때문이다. 
 패턴에 이런 경우가 있어서, 매칭이 실패했다.
@@ -204,6 +379,9 @@ show_groups('(.+)/(.+) (.+), (.+)/(.+)',
 의미를 갖는다. 이를 달리 말하면, 물음표 앞에 오는 패턴은 선택옵션이 된다.
 테스트를 다시 돌리면, 두 경우 모두에 정답이 도출된다:
 
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-funciton-extened-comma}
 # 데이터에 콤마가 있는 경우
@@ -211,11 +389,43 @@ show_groups('(.+)/(.+) (.+),? (.+)/(.+)',
             'Davison/May 22, 2010/1721.3')
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-funciton-extened-comma}
+# 데이터에 콤마가 있는 경우
+show_groups('(.+)/(.+) (.[0-9]),? (.+)/(.+)',
+            'Davison/May 22, 2010/1721.3')
+```
+
+  </div>
+</div>
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ```{python python-operator-funciton-extened-comma-no}
 # 데이터에 콤마가 없는 경우
 show_groups('(.+)/(.+) (.+),? (.+)/(.+)',
             'Davison/May 22 2010/1721.3')
 ```
+
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-funciton-extened-comma-no}
+# 데이터에 콤마가 없는 경우
+show_groups('(.+)/(.+) (.[0-9]),? (.+)/(.+)',
+            'Davison/May 22 2010/1721.3')
+```
+
+
+  </div>
+</div>
+
 
 패턴을 좀더 엄격하게 작성해 보자.
 다음 레코드는 매칭하고 싶지 *않다*:
@@ -349,24 +559,54 @@ show_groups('(.+)/(.+) ([0-9]{1,2}),? (.{4})/(.+)',
 Notebook 1,2 파일에서 나온 날짜를 추출해서 년, 월, 일을 문자열로 
 반환한다:
 
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ```{python python-operator-fix-test-get-date}
 def get_date(record):
     '''Return (Y, M, D) as strings, or None.'''
-
     # 2010-01-01
-    m = re.search('([0-9]{4})-([0-9]{2})-([0-9]{2})',
-                  record)
+    m = re.search('([0-9]{4})-([0-9]{2})-([0-9]{2})', record)
     if m:
         return m.group(1), m.group(2), m.group(3)
-
     # Jan 1, 2010 (콤마는 선택옵션이고, 일자는 1자리 혹은 2자리다.)
-    m = re.search('/([A-Z][a-z]+) ([0-9]{1,2}),? ([0-9]{4})/',
-                  record)
+    m = re.search('/([A-Z][a-z]+) ([0-9]{1,2}),? ([0-9]{4})/', record)
     if m:
         return m.group(3), m.group(1), m.group(2)
-
     return None
+    
+get_date('2010-01-01')
 ```
+
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-fix-test-get-date}
+get_date <- function(record) {
+    # Return (Y, M, D) as strings, or None.
+    # 2010-01-01
+    m <- str_match(record, '([0-9]{4})-([0-9]{2})-([0-9]{2})')
+    
+    if (!is.na(m[,2])) {
+      return (paste(m[,2], m[,3], m[,4], sep=","))
+    }
+    # Jan 1, 2010 (콤마는 선택옵션이고, 일자는 1자리 혹은 2자리다.)
+    m <- str_match(record, '/([A-Z][a-z]+) ([0-9]{1,2}),? ([0-9]{4})/')
+    if (!is.na(m[,2])) {
+      return (paste(m[,4], m[,2], m[,3], sep=","))
+    } else {
+      return()
+    }
+}
+    
+get_date('2010-01-01')
+```
+
+  </div>
+</div>
+
 
 레코드에 ISO-형식 YYYY-MM-DD 날짜가 있는 검사하면서 함수가 시작된다.
 만약 날짜가 ISO-형식이면, 필드 세개를 바로 반환한다.
@@ -392,33 +632,101 @@ def get_date(record):
 마찬가지로 `$` 앵커연산자는 라인 마지막에 위치한 이전 패턴만 매칭한다.
 예제를 살펴보자. 특정 장소에서 추출된 자료만 관심있다고 가정하자.
 
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
+
 ```{python python-operator-anchor}
 m = re.search('(^Davison.*)', 'Davison/May 22, 2010/1721.3')
 print( m.group(1) )
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-anchor}
+m <- str_match('Davison/May 22, 2010/1721.3', '(^Davison.*)')
+m[,2]
+```
+
+  </div>
+</div>
+
 반면에,
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-anchor-new}
 m = re.search('(^Baker.*)', 'Davison/May 22, 2010/1721.3')
 print( m )
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-anchor-new}
+m <- str_match('Davison/May 22, 2010/1721.3', '(^Baker.*)')
+m
+```
+
+  </div>
+</div>
+
+
 마찬가지로, 칼럼 순서를 바꾸면:
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-anchor-2}
 m = re.search('(^Davison)', '1721.3/May 22, 2010/Davison')
 print(m)
 ```
 
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-anchor-2}
+m <- str_match('1721.3/May 22, 2010/Davison', '(^Davison)')
+m
+```
+
+  </div>
+</div>
+
+
 `^Davison`을 문자열 시작부에 출현되는 경우만 매칭하기 때문이다.
 
 문자열 마지막에 매칭하는 경우도 유사하게 동작한다:
+
+<div class = "row">
+  <div class = "col-md-6">
+**파이썬 코드**
 
 ```{python python-operator-anchor--end}
 m = re.search('(.*Davison$)', '1721.3/May 22, 2010/Davison')
 print( m.group(1))
 ```
+
+  </div>
+  <div class = "col-md-6">
+**R 코드**
+
+```{r r-operator-anchor--end}
+m <- str_match('1721.3/May 22, 2010/Davison', '(.*Davison$)')
+m[,2]
+```
+
+
+  </div>
+</div>
+
 
 ### 메타문자(Meta-character)
 
