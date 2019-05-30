@@ -15,3 +15,4 @@ title: 자연어 처리
     - [추가 패턴](regex-more-pattern.html)
     - [참고문헌 사례](regex-last-wrinkle.html)
     - [요약](regex-wrapup.html)
+- [`regex` 나래를 펴라!!!](regex-ai-nlp.html)
