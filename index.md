@@ -16,3 +16,4 @@ title: 자연어 처리
     - [참고문헌 사례](regex-last-wrinkle.html)
     - [요약](regex-wrapup.html)
 - [`regex` 나래를 펴라!!!](regex-ai-nlp.html)
+- [다양한 텍스트 데이터 가져오기](regex-import-text.html)
