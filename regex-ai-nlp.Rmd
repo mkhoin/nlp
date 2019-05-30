@@ -138,6 +138,29 @@ print(result)
 
 ```
 
+# 비행기표 예약 [^building-chatbot] {#regex-airline-booking}
 
+[^building-chatbot]: Sumit Raj (2019), "Building Chatbots with Python - Using Natural Language Processing and
+Machine Learning"
 
+항공권을 예매하는 경우 출발지와 도착지 두가지 정보가 필요하다. 이를 정규표현식으로 잡아내기 위해서 `from`과 `to`를 각각 정의하고 패턴을 추출해서 출발지와 도착지를 추출해낸다. 
+
+```{python airline-booking}
+sentence = "Please find me 2 roundtrip economy tickets from Chicago to London"
+
+from_to = re.compile('.* from (.*) to (.*)')
+to_from = re.compile('.* to (.*) from (.*)')
+from_to_match = from_to.match(sentence)
+to_from_match = to_from.match(sentence)
+
+if from_to_match and from_to_match.groups():
+    _from = from_to_match.groups()[0]
+    _to = from_to_match.groups()[1]
+    print("From: {}, To: {}".format(_from, _to))
+elif to_from_match and to_from_match.groups():
+    _to = to_from_match.groups()[0]
+    _from = to_from_match.groups()[1]
+    print("From: {}, To: {}".format(_from, _to))
+
+```
 

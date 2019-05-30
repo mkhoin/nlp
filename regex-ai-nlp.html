@@ -1776,11 +1776,32 @@ div.tocify {
 <a class="sourceLine" id="cb15-11" data-line-number="11"><span class="bu">print</span>(result)</a></code></pre></div>
 <pre><code>경찰의 내사를 받고 있는 성호군은 한OO 일보와 조0일보를 잠시 착각한 것으로 밝혀졌으며 이 와중에 전화번호 XXX-XXXX-XXXX 가 외부로 유출되어 핸드폰 번호를 바꾸었으나 이 과정에서 집전화번호 XXX-XXXX-XXXX 도 유출되어 더이상 전화를 사용할 수 없는 자연인으로 돌아갔습니다. 이제 본인 전자우편 XXX-XXXX-XXXX도 당연히 외부에 절대 유출되지 않도록 국민신문고에 민원을 넣었습니다.</code></pre>
 </div>
+<div id="regex-airline-booking" class="section level1">
+<h1><span class="header-section-number">5</span> 비행기표 예약 <a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a></h1>
+<p>항공권을 예매하는 경우 출발지와 도착지 두가지 정보가 필요하다. 이를 정규표현식으로 잡아내기 위해서 <code>from</code>과 <code>to</code>를 각각 정의하고 패턴을 추출해서 출발지와 도착지를 추출해낸다.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb17-1" data-line-number="1">sentence <span class="op">=</span> <span class="st">&quot;Please find me 2 roundtrip economy tickets from Chicago to London&quot;</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">from_to <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">'.* from (.*) to (.*)'</span>)</a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">to_from <span class="op">=</span> re.<span class="bu">compile</span>(<span class="st">'.* to (.*) from (.*)'</span>)</a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">from_to_match <span class="op">=</span> from_to.match(sentence)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">to_from_match <span class="op">=</span> to_from.match(sentence)</a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="cf">if</span> from_to_match <span class="kw">and</span> from_to_match.groups():</a>
+<a class="sourceLine" id="cb17-9" data-line-number="9">    _from <span class="op">=</span> from_to_match.groups()[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb17-10" data-line-number="10">    _to <span class="op">=</span> from_to_match.groups()[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb17-11" data-line-number="11">    <span class="bu">print</span>(<span class="st">&quot;From: </span><span class="sc">{}</span><span class="st">, To: </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(_from, _to))</a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="cf">elif</span> to_from_match <span class="kw">and</span> to_from_match.groups():</a>
+<a class="sourceLine" id="cb17-13" data-line-number="13">    _to <span class="op">=</span> to_from_match.groups()[<span class="dv">0</span>]</a>
+<a class="sourceLine" id="cb17-14" data-line-number="14">    _from <span class="op">=</span> to_from_match.groups()[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb17-15" data-line-number="15">    <span class="bu">print</span>(<span class="st">&quot;From: </span><span class="sc">{}</span><span class="st">, To: </span><span class="sc">{}</span><span class="st">&quot;</span>.<span class="bu">format</span>(_from, _to))</a></code></pre></div>
+<pre><code>From: Chicago, To: London</code></pre>
+</div>
 <div class="footnotes">
 <hr />
 <ol>
 <li id="fn1"><p><a href="https://medium.com/@gk_/how-chat-bots-work-dfff656a35e2">gk_ (Jan 6, 2017), “Soul of the Machine: How Chatbots Work”</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
 <li id="fn2"><p><a href="https://stackabuse.com/using-regex-for-text-manipulation-in-python/">Usman Malik, “Using Regex for Text Manipulation in Python”, Stack Abuse</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+<li id="fn3"><p>Sumit Raj (2019), “Building Chatbots with Python - Using Natural Language Processing and Machine Learning”<a href="#fnref3" class="footnote-back">↩</a></p></li>
 </ol>
 </div>
 
