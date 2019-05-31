@@ -10,7 +10,7 @@
 
 
 
-<meta name="date" content="2019-05-30" />
+<meta name="date" content="2019-05-31" />
 
 <title>자연어 처리 - 정규표현식</title>
 
@@ -1322,6 +1322,105 @@ window.initializeCodeFolding = function(show) {
 </script>
 
 
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  { background-color: #f8f8f8; }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ef2929; } /* Alert */
+code span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #c4a000; } /* Attribute */
+code span.bn { color: #0000cf; } /* BaseN */
+code span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4e9a06; } /* Char */
+code span.cn { color: #000000; } /* Constant */
+code span.co { color: #8f5902; font-style: italic; } /* Comment */
+code span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code span.dt { color: #204a87; } /* DataType */
+code span.dv { color: #0000cf; } /* DecVal */
+code span.er { color: #a40000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #0000cf; } /* Float */
+code span.fu { color: #000000; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code span.ot { color: #8f5902; } /* Other */
+code span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code span.sc { color: #000000; } /* SpecialChar */
+code span.ss { color: #4e9a06; } /* SpecialString */
+code span.st { color: #4e9a06; } /* String */
+code span.va { color: #000000; } /* Variable */
+code span.vs { color: #4e9a06; } /* VerbatimString */
+code span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+
+.sourceCode .row {
+  width: 100%;
+}
+.sourceCode {
+  overflow-x: auto;
+}
+.code-folding-btn {
+  margin-right: -30px;
+}
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
 
 
 <style type="text/css">
@@ -1586,13 +1685,610 @@ div.tocify {
 <h1 class="title toc-ignore">자연어 처리 - 정규표현식</h1>
 <h3 class="subtitle">다양한 텍스트 데이터 가져오기</h3>
 <h4 class="author">xwMOOC</h4>
-<h4 class="date">2019-05-30</h4>
+<h4 class="date">2019-05-31</h4>
 
 </div>
 
 
 <div id="ingest-pdf" class="section level1">
 <h1><span class="header-section-number">1</span> <code>.pdf</code> 문서 가져오기</h1>
+<div id="ingest-english-pdf" class="section level2">
+<h2><span class="header-section-number">1.1</span> 영문 PDF 문서</h2>
+<p><a href="https://github.com/mstamy2/PyPDF2">PyPDF2</a>는 순수 파이썬 PDF 라이브러리로 PDF 파일 각 페이지를 쪼개고 병합하고 짤래내고 변환시킬 수 있는 기능을 제공하고 있다. <code>pip install pypdf2</code> 명령어를 통해서 설치를 한후에 확장자가 <code>.pdf</code>를 갖는 파일을 불러들일 수 있다. PDF 객체(<code>read_pdf</code>)를 만들고 나서 각 페이지내부에 포함된 텍스트를 추출한다.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="im">from</span> PyPDF2 <span class="im">import</span> PdfFileReader</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">pdf_file <span class="op">=</span> <span class="bu">open</span>(<span class="st">'data/sample.pdf'</span>, <span class="st">'rb'</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">read_pdf <span class="op">=</span> PdfFileReader(pdf_file)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">text <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,read_pdf.getNumPages()<span class="op">-</span><span class="dv">1</span>):</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">    text.append(read_pdf.getPage(i).extractText())</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="bu">print</span>(<span class="vs">r'불러온 PDF 파일: \n'</span>,text)</a></code></pre></div>
+<pre><code>불러온 PDF 파일: \n [' A Simple PDF File  This is a small demonstration .pdf file -  just for use in the Virtual Mechanics tutorials. More text. And more  text. And more text. And more text. And more text.  And more text. And more text. And more text. And more text. And more  text. And more text. Boring, zzzzz. And more text. And more text. And  more text. And more text. And more text. And more text. And more text.  And more text. And more text.  And more text. And more text. And more text. And more text. And more  text. And more text. And more text. Even more. Continued on page 2 ...']</code></pre>
+<p>이를 함수로 작성하여 <code>get_text_pdf()</code>로 제작하여 PDF파일에 포함된 텍스트를 추출한다.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">def</span> get_text_pdf(pdf_filename):</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">    pdf_file <span class="op">=</span> <span class="bu">open</span>(pdf_filename, <span class="st">'rb'</span>)</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">    read_pdf <span class="op">=</span> PdfFileReader(pdf_file)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">    <span class="co">## PDF 텍스트 결과</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">    pdf_text <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="co">## PDF 텍스트 추출</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, read_pdf.getNumPages()<span class="op">-</span><span class="dv">1</span>):</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">        pdf_text.append(read_pdf.getPage(i).extractText())</a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">     <span class="co"># 개행문자 결합</span></a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">    <span class="cf">return</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>.join(pdf_text)  </a>
+<a class="sourceLine" id="cb3-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="bu">print</span>(<span class="vs">r'불러온 PDF 파일: \n'</span>, get_text_pdf(<span class="st">'data/sample.pdf'</span>))</a></code></pre></div>
+<pre><code>불러온 PDF 파일: \n  A Simple PDF File  This is a small demonstration .pdf file -  just for use in the Virtual Mechanics tutorials. More text. And more  text. And more text. And more text. And more text.  And more text. And more text. And more text. And more text. And more  text. And more text. Boring, zzzzz. And more text. And more text. And  more text. And more text. And more text. And more text. And more text.  And more text. And more text.  And more text. And more text. And more text. And more text. And more  text. And more text. And more text. Even more. Continued on page 2 ...</code></pre>
+</div>
+<div id="ingest-korean-pdf" class="section level2">
+<h2><span class="header-section-number">1.2</span> 한글 PDF 문서</h2>
+<ul>
+<li><a href="https://github.com/pdfminer/pdfminer.six/">pdfminer</a>
+<ul>
+<li>“CJK languages and vertical writing scripts support.”</li>
+<li>많은 기능중에 CJK 언어를 활용할 수 있다.</li>
+</ul></li>
+<li>PyMuPDF</li>
+<li><a href="https://nearman.tistory.com/entry/8-%ED%8C%8C%EC%9D%B4%EC%8D%AC%EC%9C%BC%EB%A1%9C-PDF%ED%8C%8C%EC%9D%BC-%EC%9D%BD%EC%96%B4%EC%98%A4%EA%B8%B0-PDF%ED%8C%8C%EC%9D%BC%EC%97%90%EC%84%9C-%ED%85%8D%EC%8A%A4%ED%8A%B8-%EB%82%B4%EC%9A%A9-%ED%8C%8C%EC%8B%B1">Tika, PDF파일에서 텍스트 내용 파싱</a>: 자바 의존성을 갖고 있으며, <code>pip install tika</code> 명령어로 설치 후 사용, 느리다는 평가가 많음.</li>
+</ul>
+<p><code>PyPDF</code>를 사용하게 되면 CJK 언어로 된 <code>.pdf</code> 파일에서 한국어를 추출할 경우 제대로 추출이 되고 있지 않다.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb5-1" data-line-number="1">pdf_file <span class="op">=</span> <span class="bu">open</span>(<span class="st">'data/hangul_sample.pdf'</span>, <span class="st">'rb'</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">read_pdf <span class="op">=</span> PdfFileReader(pdf_file)</a></code></pre></div>
+<pre><code>PdfReadWarning: Xref table not zero-indexed. ID numbers for objects will be corrected. [pdf.py:1736]</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb7-1" data-line-number="1">text <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>,<span class="dv">1</span>):</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">    text.append(read_pdf.getPage(i).extractText())</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="bu">print</span>(<span class="vs">r'불러온 PDF 파일: \n'</span>,text)</a></code></pre></div>
+<pre><code>불러온 PDF 파일: \n ['˚r*¶\n/\'{*B%3 ˚k9®#Î\n, %VG¯˜¦\n AJG&gt;Cƒ˜KG¯/Ö\n , Copyright 2013\n-2016\n  :r19û:  ƒ˜ˆ\n ˚r8ê  1.1 \n9®  1.2 \nGZ*² N)î.c  &gt;~9Ê:f 1.3 \n  1.4 \n8Œ ?² R .r:Z &amp;/Gû   \n \n 1.1 \n    524úC²9Œ\n *²/ÖCƒ\n  4ú4ú*²\n 3⁄$û9ı\n  524úC²9™*²\n, 9Ê\n  524úC²9Œ 9Ê&quot;î\n &amp;/-™˜R\n ˚o9Ê H®\n ˚WG®˜6\n 8&amp;\n %VGÊ Gß&amp;/G®,Æ\n :W9§G®$ê\n 9Ê%:\n.      ?² R   %:7çG² /Ú7Ò8&amp; 9§8ÿ&amp;n˜6\n 9Þ%:. Google\n, Apple Siri, \nIBM Watson, \nMicrosoft Cortana\n \'G9Œ  ƒ˜ˆG¯\n 8B\n %:7çG²\n &amp;ˆ,ª9Î9®\n 9ı\n G®˜6 5::r -”:r9® 8&amp;\n :W8ÿG®˜69Þ%:\n. Google\n9® GooLeNet\n9Œ .⁄ ,&quot;9û9® /ÖCƒ\n &gt;ò  :Û+®9® +Ò\n /Ú+®G®$ê\n -”:r8&amp;3r\n 9Î˚Z 4n;V9® 3⁄$û9ı\n /J8V9™,Æ, Facebook\n9® DeepFac\ne$ê   9Î53G®$ê\n -”:r8&amp;3r 9Î˚Z 4n;V9®\n 3⁄$û9ı /J8V%:. Microsoft\n8&amp;3r ˚r.rG² \'{*B%39ı :W8ÿG²\n 9¢3⁄9Î53\n  ƒ4v9Œ\n 9¢3⁄9Î53\n -”:r9® 3˚*²\n &amp;&quot;Eb˜Â+Ò\n 8J8˚9™,Æ, Google \nDeepMind\n$ê 5::r )â&gt;î*R\n 0ı\'j8z ˚â9Ú9ı\n G®$ê  ƒ4v9ı ˚r.rG®8V%:\n.      9ı /J%: Hk53HªG®8B\n :k9®G®,Ê\n ﬁ(Environment)\n˜R9®  9ç8ÿ9ı 3r\n ?ë:W&amp;n$ê H.:W9Î\n %Æ9ÊCƒ\n(Data)\n+Ò .jC+9™*²\n , ;ß ,þ%Î(Model)\n9ı 9æ&amp;/9™*²\n ˜Â?ëG®˜6\n 4ú4ú*² 3⁄$û(Performance)\n9ı G®$ê 524úC²ﬂ9Ê%:. 9Ê*²/ÖCƒ  ƒ˜ˆG¯\n 524úC²9Œ\n ˜V@w %Æ9ÊCƒ D*²/ÖCƒ\n 3⁄$û  P+Ò ?²:WHªG®$ê\n ,þ%Î M9ı 9æ&amp;/9™*² ,&quot;\'2$ê\n  ƒ4v9Ú9ı\n 7¢ 4n 9Þ%:. 9Ê \'¢, %Æ9ÊCƒ$ê\n 9®\n &quot;€9Ú8˝$ê H”9ç8ÿ9ı\n 8B\n ?ë:W&amp;r%:. FF9®\n  ˚V\n 7Ç9ı G¶4n*³\n %Æ9ÊCƒ˚V ?ë:W&amp;n˜6 4úC²9Œ\n 9Ê+Ò 9Ê8ÿG®8B\n /J%: ˚r9ÎHª&amp;r\n 4ú,˚\n 3r0ı4ú+Ò :r˜KG²%:. *²/]9® , $û&amp;/:W9™*²\n H®\n 9ç8ÿ9ı\n G¾9™*²5¾\n %Æ9ÊCƒ+Ò\n 333⁄G® ƒ&amp;ˆ\n G²%:.         524úC²9Ê ,&quot;\'6 ,þ%Î9Œ %Æ9ÊCƒ8&amp;\n %VG² 539ı\n FBG¾G®˜6 9Þ%:. \'ƒ)Ò3r\n  9æ&amp;/9™*² 539ı\n .rG®$ê  ƒ4v*²&amp;ˆ /R 4n 9Þ%:. 9Ê$ê %Æ9ÊCƒ,˚9Ê%3\n /Ú7Ò8&amp;3r\n   ƒ4v9Ê ;g8êG²\n 9Ê9v9Ê%:\n. \n ˚r.r ˜V:f8&amp;3r\n 33˚WG²%:,Ê,  ƒ˜ˆ\n %Æ9ÊCƒ*²/ÖCƒ\n GZ*² N)þ9ı\n 9æ&amp;/9™*² 333⁄G®$ê\n  ƒ4v9Ê%:. 9Ê$ê 3âGZ\n GZ*² N)î,”9®\n *² 9ç3⁄G®%® GZ*² N)î.c\n 9®\n 3âGZ\n ˚r.r $ê\n %V:Æ:W9Ê,Æ\n HW56:W9Î\n %:\n. ?² R &quot;ò\n 3⁄$û9ı /J9Ê˜6 9Þ$ê ,”56*B%3\n 7¢˜6\n ;g G®&quot;î9Î\n \'{*B%39®\n  0ł%Æ9ÊCƒ*²/ÖCƒ\n 9æ&amp;/9™*²\n GZ*² N)î.c&amp;r\n GZ*² N)þ9Ê\n   GZ*² N)î.cG²\n GZ*² N)þ9®  /J%: %ª :á9Œ 3⁄$û9ı  4n 9Þ9¢9ı /J8B;V%:. 9Ê$ê  539ı\n 9Z.ƒG®$ê\n ˚Ù9™*²3r\n 7´9™*² AJG&gt;Cƒ 3⁄$û9Ê  :á7ı&lt;˚ 4n*³, G¯\n %Æ9ÊCƒ9® 7ç9Ê ;ó˚VG¶\n 4n*³, 9Ê*BG² ?ê3”$ê\n ˜ˆ3ã&amp;v\n ˚Ù9Ê%:\n.        ?² R9® \'{*B%3  ƒ4v9Œ  ƒ:Ê9®  ƒ˜ˆ\n ˚â\n %:+Î˚V? \'{*B%39Œ $&quot;+Ò   ,þ%Î*², ,$9Œ 4n9® 9ı\n 5i9¢9™*²3r\n 9Û*{&amp;r\n %Æ9ÊCƒ˚V\n 8B*B %&gt;˜ˆ9®  ?ê?ò ˜R:k9ı\n ˚Æ?&amp; 9æ&amp;/9™*² ˜64n;V9®\n :W9Î\n  ?ê?òG®$ê\n 9Ê%:\n. (fG²,  ?ê?ò˜R  /Ú+®, &amp;¦ %&gt;˜ˆ*² &quot;î\n %®\n  ƒ:Ê9® -”:r+Ò\n   -”:r*² G®8B\n G¯G®$ê\n, /J%: 9æ&amp;/Hª&amp;r   ƒ4v9Ê%:\n.  /K9÷G² %Æ9ÊCƒ+Ò\n 9Û*{9™*²\n  F²HZ9ı\n 9æ&amp;/9™*²\n   \'¢-”8&amp; Fã/ÖG² G¯9ÊCƒ˚V\n G®,Ê\n /J%: :á9Œ 3⁄$û9ı  4n 9Þ%:.         ']</code></pre>
+<p><a href="https://stackoverflow.com/questions/26748788/extraction-of-text-from-pdf-with-pdfminer-gives-multiple-copies">extraction of text from pdf with pdfminer gives multiple copies</a> 코드를 참조하여 <code>pdfminer</code> 라이브러리를 사용해서 한국어로된 PDF 파일에서 한글을 잘 추출할 수 있는 방법도 있음이 확인되었다.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="im">from</span> pdfminer.pdfinterp <span class="im">import</span> PDFResourceManager, PDFPageInterpreter</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="im">from</span> pdfminer.converter <span class="im">import</span> TextConverter</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="im">from</span> pdfminer.layout <span class="im">import</span> LAParams</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="im">from</span> pdfminer.pdfpage <span class="im">import</span> PDFPage</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="im">from</span> io <span class="im">import</span> StringIO</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="kw">def</span> convert_pdf_to_txt(path):</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">    rsrcmgr <span class="op">=</span> PDFResourceManager()</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">    retstr <span class="op">=</span> StringIO()</a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">    codec <span class="op">=</span> <span class="st">'utf-8'</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11">    laparams <span class="op">=</span> LAParams()</a>
+<a class="sourceLine" id="cb9-12" data-line-number="12">    device <span class="op">=</span> TextConverter(rsrcmgr, retstr, codec<span class="op">=</span>codec, laparams<span class="op">=</span>laparams)</a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">    fp <span class="op">=</span> <span class="bu">open</span>(path, <span class="st">'rb'</span>)</a>
+<a class="sourceLine" id="cb9-14" data-line-number="14">    interpreter <span class="op">=</span> PDFPageInterpreter(rsrcmgr, device)</a>
+<a class="sourceLine" id="cb9-15" data-line-number="15">    password <span class="op">=</span> <span class="st">&quot;&quot;</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16">    maxpages <span class="op">=</span> <span class="dv">0</span></a>
+<a class="sourceLine" id="cb9-17" data-line-number="17">    caching <span class="op">=</span> <span class="va">True</span></a>
+<a class="sourceLine" id="cb9-18" data-line-number="18">    pagenos<span class="op">=</span><span class="bu">set</span>()</a>
+<a class="sourceLine" id="cb9-19" data-line-number="19">    </a>
+<a class="sourceLine" id="cb9-20" data-line-number="20">    <span class="cf">for</span> page <span class="kw">in</span> PDFPage.get_pages(fp, pagenos, maxpages<span class="op">=</span>maxpages, password<span class="op">=</span>password,caching<span class="op">=</span>caching, check_extractable<span class="op">=</span><span class="va">True</span>):</a>
+<a class="sourceLine" id="cb9-21" data-line-number="21">        interpreter.process_page(page)</a>
+<a class="sourceLine" id="cb9-22" data-line-number="22">        text <span class="op">=</span> retstr.getvalue()</a>
+<a class="sourceLine" id="cb9-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb9-24" data-line-number="24">    fp.close()</a>
+<a class="sourceLine" id="cb9-25" data-line-number="25">    device.close()</a>
+<a class="sourceLine" id="cb9-26" data-line-number="26">    retstr.close()</a>
+<a class="sourceLine" id="cb9-27" data-line-number="27">    <span class="cf">return</span> text</a>
+<a class="sourceLine" id="cb9-28" data-line-number="28">    </a>
+<a class="sourceLine" id="cb9-29" data-line-number="29">extracted_text <span class="op">=</span> convert_pdf_to_txt(<span class="st">'data/hangul_sample.pdf'</span>)</a>
+<a class="sourceLine" id="cb9-30" data-line-number="30"><span class="bu">print</span>(extracted_text)</a></code></pre></div>
+<pre><code>기계학습개론/딥러닝 강의노트, 서울대학교 컴퓨터공학부 장병탁, Copyright 2013-2016 
+ 
+제 1 장: 기계학습 개요 
+ 
+1.1 기계학습의 특성 
+1.2 프로그래밍 방식과의 차이점 
+1.3 산업적 응용사례 
+1.4 역사와 최근 발전 동향  
+ 
+ 
+ 
+1.1 기계학습의 특성 
+ 
+
+학습 시스템은 경험으로부터 학습하여 스스로 성능을 향상하는 시스템으로, 이상적인 학습 
+
+시스템은 사람이나 동물과 같이 환경을 지각하고 환경에 대해 행동하며 적응하는 생명체이다.  
+    최근  들어  기계학습이  다양한  분야에  응용되고  있다.  Google,  Apple  Siri,  IBM  Watson, 
+Microsoft  Cortana  등은  기계학습을  사용하여  다양한  도메인의  지식을  습득하고  실제 
+문제의  해결에  적용하고있다.  Google 의  GooLeNet 은  백  만장의  이미지로부터  천  가지 
+종류의 물체를 분류하는 문제에서 인간 수준의 성능을 보였으며, Facebook 의 DeepFace 는 
+사람의  얼굴을  인식하는  문제에서  인간  수준의  성능을  보였다.  Microsoft 에서  개발한 
+딥러닝을  적용한  음성인식  기술은  음성인식  문제의  새로운  돌파구를  열었으며,  Google 
+DeepMind 는 실제 사람처럼 비디오 게임을 학습하는 기술을 개발하였다. 
+     기계학습을  보다  형식화하여  정의하면  “환경(Environment)과의  상호  작용을  통해서 
+축적되는  경험적인  데이터(Data)를  바탕으로  지식,  즉  모델(Model)을  자동으로  구축하고 
+스스로  성능(Performance)을  향상하는  시스템”이다.  이로부터  기계학습  시스템은  관측 
+데이터 D 로부터 성능 지수 P 를 최적화하는 모델 M 을 자동으로 만드는 기술임을 알 수 있다. 
+이 때, 데이터는 환경과의 끊임없는 상호작용을 통하여 축적된다. 스마트폰의 경우 사용자가 
+앱을  사용할수록  데이터가  축적되고  학습시스템은  이를  이용하여  보다  개인화된  스마트 
+서비스를  제공한다.  로봇의  경우,  능동적으로  환경과  상호작용을  함으로써  데이터를 
+생성하기도 한다.  
+      학습  시스템이  만든  모델은  데이터에  대한  지식을  포함하고  있다.  따라서  기계학습은 
+자동으로  지식을  발견하는  기술로도  볼  수  있다.  이는  데이터마이닝  분야에서  기계학습 
+기술이  중요한  이유이다.  소프트웨어  개발  관점에서  생각한다면,  기계학습은  데이터로부터 
+프로그램을 자동으로 생성하는 기술이다. 이는 소프트웨어를 프로그래머의 논리로 작성하던 
+프로그래밍  방식의  소프트웨어  개발  방법과는  대조적이며  혁신적인  방식이다.  최근  뛰어난 
+성능을 보이고 있는 머신러닝 알고리즘 중 하나인 딥러닝의 결과는 빅데이터로부터 자동으로 
+프로그래밍된  프로그램이  사람이  직접  프로그래밍한  프로그램의  결과  보다  더  좋은  성능을 
+낼  수  있음을  보여준다.  이는  지금까지의  상식을  위배하는  것으로서  앞으로  컴퓨터  성능이 
+더욱 좋아질 수록, 학습할 데이터의 양이 증가할 수록, 이러한 추세는 계속될 것이다.   
+     최근의  딥러닝  기술은  기존의  기계학습과  어떻게  다른가?  딥러닝은  뇌를  모사한  학습 
+모델로, 많은 수의 신경층을 쌓음으로서 입력된 데이터가 여러 단계의 특징 추출 과정을 거쳐 
+자동으로  고수준의  추상적인  지식을  추출하는  방식이다.  또한,  특징  추출과  특징  분류,  두 
+단계로  나뉘어  학습하던  기존의  문제를  특징  학습의  문제로  통합하여  학습하는,  보다 
+자동화된  학습  기술이다.  특히  복잡한  데이터를  입력으로  주어도  표현을  자동으로  학습해 
+내기 때문에 풍부한 학습데이터가 존재하면 보다 좋은 성능을 낼 수 있다.   
+ 
+ 
+ 
+ 
+ 
+ 
+
+표 1: 학습시스템과 기계학습의 정의 
+
+•  학습  시스템:  환경과의  상호작용으로부터  획득한  경험적인  데이터를  바탕으로 
+
+지식을 자동으로 습득하여 스스로 성능을 향상하는 시스템  
+
+•  기계학습: 인공적인 학습 시스템을 연구하는 과학과 기술. 즉, 경험적인 데이터를 
+
+바탕으로 지식을 자동으로 습득하여 스스로 성능을 향상하는 기술  
+
+o  데이터를 기반으로 모델을 자동으로 생성하는 기술 
+o  실세계의 복잡한 데이터로부터 규칙과 패턴을 발견하여 미래를 예측하는 
+
+기술 
+
+o  입출력 데이터로부터 프로그램을 자동으로 생성하는 기술 
+
+ 
+
+ 
+1.2 프로그래밍 방식과의 차이점 
+
+ 
+그림 1: Human Programming 과 Automatic Programming 의 차이점 
+
+소프트웨어  관점에서  일반적인  컴퓨터  프로그램과  기계학습  프로그램은  분명한  차이가 
+있다.  이를  살펴보기  위해서  학습  시스템이  “환경”,  “데이터”,  “성능”의  구성요소로  되어 
+있다는  것에  주목하자.  “환경”은  학습  시스템이  독립적으로  존재하는  것이  아니라  서로 
+상호작용하는 대상이 있음을 의미하며, 상호작용의 방법에 따라 경험하는 “데이터”의 형태가 
+다르다.  이것은  보통의  컴퓨터  프로그램이  이미  프로그램이  작성될  때  모든  가능한  입력을 
+고려하여  그  경우만을  다루도록  설계되는  것과  구별된다.  학습  시스템은  문제해결을  위한 
+수행  시스템과  연결되며  시간의  경과에  따라서  수행의  “성능”이  향상되는  특징을  지닌다. 
+예를 들어, 사용자가 이메일을 사용하는 패턴을 분석하여 자동으로 스팸메일을 차단해 주는 
+스팸  필터  학습  시스템을  생각해  보자.  이  경우  스팸필터가  “시스템”이  되며  사용자는 
+“환경”이고  “데이터”는  메시지들과  이에  대한  사용자  행동의  관측값들로  구성된다.  여기서 
+“성능”은  제시해  준  메시지  개수와  비교하여  사용자가  읽은  메시지의  개수,  즉  얼마나 
+효과적으로 메일을 여과해 주는지로 측정된다.  
+     기계학습이  왜 중요한가? 기계학습은 문제 해결을 위한  명시적인 지식이  존재하지  않는 
+경우에  적용  가능하기  때문이다.  프로그래밍  방식으로  문제를  해결하기  위해서는  명시적인 
+지식을  숙지한  프로그래머에  의해  문제의  해결이  구현  될  수  있어야  하기  때문에,  문제를 
+풀기 위한 명시적 지식이 반드시 필요하다. 반면, 기계학습은 주어진 데이터를 토대로 환경과 
+상호작용하여  직접  학습을  하기  때문에,  명시적인  지식이  존재하지  않는  경우에도  활용 
+가능하다. 기계학습이 유용한 또 다른 예는 사람이 문제 해결  방법을 프로그래밍 하는  것이 
+어려운  경우이다.  예를  들어,  음성  인식  절차를  사람이  직접  구현하는  것은  실제적으로 
+불가능하다. 또한 환경이 지속적으로 변화하는 문제의 경우 또한 기계학습 적용이 필요하다. 
+환경의  변화에  따라  프로그램은  유연한  응답을  도출해야하기  때문이다.  다양한  상황에서 
+다양한 행동을 행해야 하는 자율 이동 로봇이 이에 속한다.  
+
+     그렇다면  왜  최근  기계학습의  중요성이  대두되는가?  주된  이유는  IT  환경의  변화 
+때문으로  보여지며,  세부적으로는  크게  네가지  요인을  들  수  있다.  첫번째  요인은 
+빅데이터이다.  기계학습이  효과적이기  위해서는  많은  양의  학습  데이터가  필요하다.  최근 
+모든  정보의  디지털화를  통해  빅데이터가  확보되었으며,  기계학습은  빅데이터를  활용하여 
+성능을 향상할 수 있는 좋은 방법이다. 둘째, 컴퓨팅 성능의 향상이다. 기계학습 알고리즘은 
+일반적으로 많은 계산 시간을 필요로 하는데, 최근  하드웨어 발달을 통해 수행 시간이 매우 
+단축되었다. 셋째, 다양한 서비스로의 직접적인 연결이 가능하는 점이다. 최근 모바일 기기가 
+널리  보급됨으로서  사용자의  데이터를  실시간에  수집하는  것이  가능해졌고,  해당  데이터를 
+학습함으로써  다양한  서비스를  소비자에게  직접  제공할  수  있다.  마지막으로  기계학습이 
+중요한  이유는,  무엇보다도  기업체  관점에서  직접적인  비즈니스  가치를  창출할  수  있다는 
+것이다. Google, Facebook, eBay, Amazon 등 많은 인터넷 기업은 광고 혹은 추천 서비스에 
+의존적인  서비스를  제공한다.  편리하고  정확한  서비스를  위해서는  사용자의  관심  혹은 
+선호도를  파악하여  활용하는것이  중요하며,  기계학습은  사용자의  인터넷  활동  및  로그 
+데이터를 기반으로 숨겨진 의도를 파악할 수 있는 핵심 기술이다. 
+ 
+ 1.3 산업적 응용사례 
+ 
+
+기계학습은  다양한  분야에  산업적으로  활용되고  있다.  1992 년,  카네기멜론  대학교와 
+메르세데스 벤츠에서는 신경망 구조를 이용하여 자동차를 자동 운전하는 기술을 개발하였고, 
+100km 이상의 속도로 고속도로를 장기 주행하는것에 성공하였다. 이 때, 해당 자동차에 전면 
+카메라를  설치하여  수집한  전면  영상을  입력으로,  운전대와  가속  페달  및  브레이크  페달에 
+센서를  장착하여  수집한  센서  데이터를  출력으로  알고리즘을  구현하였다.  이러한  초기 
+기술은  2005 년,  미국  국방연구지원소에서  개최한  무인  자동차  경주대회에서  우승한 
+스탠포드 대학, 2009 년에 구글이 발표한 무인자동차에 활용되었다.  
+     IBM 이  개발한  인공지능  퀴즈머신  Watson  도  기계학습  기술을  활용한  대표적인  예  중 
+하나이다.  Watson 은  Jeopardy 라는  TV  퀴즈쇼에  출연하여  역대  인간  챔피언과  대결하여 
+우승하였다.  이를  위해  Watson 은  Wikepedia  등  웹에  존재하는  대규모의  문서를  모아 
+백과사전적 지식을 자동 구축하였다.  
+    기계학습은  그  외에도  다양한  분야에  활용되고  있다(표  2).  하기  표와  같이  기계학습은 
+음성인식,  컴퓨터비젼,  로보틱스,  자연언어처리,  컴퓨터그래픽,  HCI,  인터넷  정보검색, 
+텍스트  마이닝,  생물정보학,  바이오메트릭스,  통신사업,  서비스업,  제조업  등  거의  모든 
+분야에서 활용되는 핵심 기반 기술이다. 인터넷 쇼핑몰 운영자는 고객에게 개인화된 양질의 
+서비스를  제공하고,  보다  효율적인  마케팅  전략을  세우기  위해  웹  로그  파일을 
+데이터마이닝하기  위한  기계학습  기술을  이용한다.  컴퓨터그래픽  연구자는  모션  캡쳐 
+데이터를  기계학습하여  사람처럼  자연스러운  동작을  재현하는  애니메이션  모델을  자동 
+생성한다.  생명과학  연구자는  DNA  칩을  이용한  유전자  발현  데이터로부터  암에  관련되는 
+질병에  직접적인  영향을  주는  유전자를  찾아내기  위해  기계학습  기반의  지식  발굴  기술을 
+사용한다. HCI 연구자는 모바일 환경에서 휴대기기를 편리하게 조작하기 위해서 다양한 센서 
+정보에 기반, 기기의 움직임을 인식하기위해 기계학습 알고리즘을 사용한다.  
+
+ 
+그림 2: 기계학습의 산업적 응용사례, 스탠포드 대학의 Stanley (좌), IBM 의 Watson(우) 
+
+http://edition.cnn.com/2011/TECH/innovation/02/14/jeopardy.ibm.watson/ 
+
+https://cs.stanford.edu/group/roadrunner/stanley.html 
+
+ 
+
+ 
+
+ 
+
+표 2: 기계학습의 다양한 활용 분야 
+
+•  데이터마이닝, 정보검색, 텍스트마이닝, 웹마이닝, 빅데이터 
+•  비즈니스 분석, 전자상거래, 신용카드 도용 검출 
+•  컴퓨터비전, 물체인식, 물체추적, 네비게이션  
+•  로보틱스, 휴머노이드 로봇, 모바일 로봇, 무인 자동차  
+•  컴퓨터그래픽스, 데이터기반 애니메이션 
+•  바이오인포매틱스, 의약학, 재정공학 
+
+ 
+
+  
+
+1.4 역사와 최근 발전 동향 
+ 
+
+기계학습이라는 용어가 처음 문헌에 등장한 것은 1959 년 Samuel 의 논문“Some Studies 
+in Machine Learning  Using the Game of Checkers” 이다[1]. 그는 게임보드의 패턴으로 
+정의된  특징과  가중치의  곱의  합으로  평가함수를  정의하고  가중치를  변경함으로써  게임을 
+학습하는  방법을  제안하였다.  또한  비슷한  시기에  Rosenblatt 은  신경망  모델의  일종인 
+퍼셉트론과  그  학습  알고리즘을  제시하였다.  1975 년에  Winston 은  건축물의  아치모양을 
+예로 학습하는 기호적인 개념 학습 프로그램을 개발하였다[2]. 이러한 태동기의 아이디어에 
+기반하여 기계학습이 하나의 새로운 연구 분야로 자리잡기 시작한 것은 1980 년대 중반이다. 
+1983 년과 1986 년에 Machine Learning: An Artificial Intelligence Approach 의 Volume 
+I 과  II 가  발간되어  기계학습  연구의  기반이  마련되었다[3,4].  1984 년에  Valiant 는 
+Communications of the ACM 에 “A Theory of the Learnable”이란 제목의 계산학습이론 
+(Computational Learning Theory) 논문을 발표하면서 기계학습이 계산이론과 접목되었고,  
+이론적인  틀을  갖추기  시작하였다.  1986 년에는  Rumelhart  &amp;  McClleland 의  Parallel 
+Distributed Processing  모델에  관한 연구 결과가  두 권의  책으로 정리되어  발표되면서[5] 
+신경망기반의 연결론적 기계학습 연구가 시작되었다. 
+     다른 한편, 1980 년대 중반부터 Uncertainty in Artificial Intelligence(UAI)나 Artificial 
+Intelligence  and  Statistics(AI  &amp;  Stats)  등의  학술대회를  통해서  통계학과  인공지능이 
+결합되는 시도가 일어나고, 1988 년 Pearl 의 Bayesian Belief Network 연구, Lauritzen 과 
+Spiegelhalter  및  Jensen  등의  Graphical  Model  연구,  1994 년  Neal 의  Belief  Network 
+연구, 1997 년 Hinton 의 Helmholtz Machine 연구, 1995 년 Vapnik 의 Statistical Learning 
+Theory,  1999 년  Schoelkopf 의  Kernel  Machine  등을  통해서  기계학습에  대한  수학적, 
+확률  통계학적인  기반이  마련되었고,  기계학습은  엄밀한  학문  및  기술  분야로  정립되기 
+시작했다.  1990 년대  중반  이후  웹이  등장하고  인터넷이  보급되면서  정보검색과 
+데이터마이닝이  새로운  산업으로  등장하였고,  기계학습은  그  핵심  기술로  자리매김하게 
+되었다.  
+     2000 년대  들어  기계학습은  공고한  연구분야로서  틀을  갖추기  시작하며  2001 년에는 
+새로운  저널  Journal  of  Machine  Learning  Research 가  창간된다.  특히  기존  다층신경망 
+보다  빠르고  정규화에  의해  정확도도  개선된  SVM 이  다양한  분야에  응용되기  시작하며 
+기계학습이  산업화하기  시작하였다.  또한  다수의  교과서가  등장하였다.  MacKay  (2003), 
+Thrun  et  al.  (2005),  Bishop  (2006),  Haykin  (2008),  Koller  (2009)  등이  그  예이다. 
+2010 년과  2011 년에는  기계학습  연구자인 Valiant 와  Pearl 이  각각  Turing  상을  받기도 
+하였다. 
+
+기계학습의  산업화에  불씨를  제공한  것은  아마도  2005 년에  개최된  DARPA  무인자동차 
+경주대회일  것이다.  이는  2007 년의  Urban  Challenge 와  2009 년의  Google  Car  발표, 
+2012 년의 Robotics Challenge 로 이어져 자동차와 로보틱스 분야에서 기계학습의 산업화의 
+계기가  되었다.    2009 년에는  Apple  Siri 의  비서에이전트가  등장하여  인공지능이 
+일상생활에  들어오게  되었으며  스마트폰에서  기계학습  기술이  활용되는  산업화의  길을 
+열었다.  2011 년 IBM 은 기계학습 기술을 이용한 Watson 퀴즈 머신 개발하고 이를 이용한 
+스마트 어드바이저의 사업화를 추진하고 있다.  
+     2011 년,  딥러닝  기술이  음성인식  분야에서  세계  신기록을  세우면서  SVM 을  대치하는 
+새로운 기계학습 기술로 떠 올랐다. 딥러닝은 2012 년, 대규모의 이미지넷 데이터를 기반으로 
+한  물체인식  대회에서  기존의  기계학습  방법의  성능을  압도적으로  뛰어넘는  기록을  세우며 
+우승하였다.  2013 년에는  딥러닝  기반의  DeepFace 기술로  인간수준의  얼굴인식  성능을 
+
+보이기도  하였다.  최근에는  Amazon  Echo,  IBM  CogniToys,  SoftBank  Pepper,  MIT  Jibo 
+등의 스마트머신이 출현하고 있다. 기계학습 기술은 이들 스마트머신이 환경과 상호작용하는 
+경험을 통해 상황 기반의 지능 서비스를 제공하는데 활용될 것으로 예견된다. 
+ 
+ 
+잠재기  
+1943: McClloch &amp; Pitt’s Neuron 
+1949: Hebbian learning (Hebb) 
+1958: Perceptron (Rosenblatt) 
+1959: Checkers’ Player (Samuel) 
+1960: Delta rule (Widrow &amp; Hoff) 
+1961: Lernmatrix (Steinbuch) 
+1965: Learning machines (Nilsson) 
+1967: Outstar learning (Grossberg) 
+1969: Perceptron book (Minsky &amp; Papert) 
+1972: Associative memory neural nets (Kohonen) 
+1973: Pattern classification and scene analysis (Duda &amp; Hart) 
+1975: Symbolic concept learning (Winston) 
+1977: Associative memory nets (Anderson) 
+1977: Actor-critic model (Witten) 
+ 
+태동기  
+1981: Parallel models of associative memory (Hinton &amp; Anderson, Eds.) 
+1982: Self-organizing maps (Kohonen) 
+1982: Hopfield networks (Hopfield) 
+1983: Boltzmann machine (Hinton &amp; Sejnowski) 
+1983: Machine learning workshop and book (Carbonell &amp; Mitchell, Eds.) 
+1983: Actor-critic model (Barto, Sutton, Anderson) 
+1984: PAC computational learning theory (Valiant) 
+1985: Adaptive resonance theory (Carpenter &amp; Grossberg) 
+1986: Parallel distributed processing PDP (Rumelhart &amp; McClleland) 
+1986: Backpropagation algorithm (Rumelhart, Hinton, &amp; Williams) 
+1986: Machine learning (journal) 
+1986: Decision trees (Quinlan) 
+1987: Neural network conferences (ICNN, INNS, NIPS) 
+1988: Bayesian networks (Lauritzen &amp; Spiegelhalter, Pearl) 
+1989: Q-learning (Watkins) 
+ 
+성장기  
+1992: TD-Gammon (Tesauro) 
+1992: Support vector machines (Boser, Guyon, &amp; Vapnik) 
+1994: Learning Bayesian networks (Hackerman) 
+1995: Statistical learning theory (Vapnik) 
+1995: Neural networks for pattern recognition (Bishop) 
+1997: Machine learning textbook (Mitchell) 
+1998: Neural networks (Haykin) 
+1998: Reinforcement learning (Sutton &amp; Barto) 
+1999: Learning in graphical models (Jordan) 
+1999: Kernel machines (Schoelkopf &amp; Smolar) 
+2001: Journal of machine learning research (JMLR) 
+2003: Boosting algorithms (Freund) 
+2003: Information theory, inference, and learning algorithms (MacKay) 
+ 
+
+ 
+발전기  
+2005: DARPA grand challenge (Thrun) 
+2005: Probabilistic robotics (Thrun, Burgard, &amp; Fox) 
+2006: Deep neural networks (Hinton) 
+2006: Pattern recognition and machine learning (Bishop) 
+2008: Neural networks and learning machines (Haykin) 
+2009: Probabilistic graphical models (Koller) 
+2009: Siri personal assistant (Apple) 
+2009: Google car (Thrun) 
+2010: Turing award in learning theory (Valiant) 
+2011: Watson AI supercomputer (IBM) 
+2011: Turing award in Bayesian networks (Pearl) 
+2012: DNNresearch deep learning (Hinton &amp; Google) 
+2012: Large-scale image retrieval (Google) 
+2013: Human brain project HBP (EU) 
+2013: Artificial Intelligence Labs (FaceBook) 
+2014: Institute for Deep Learning (Baidu) 
+
+http://mashandiz.blogspot.kr/2015/04/the-most-important-topics-in-machine.html 
+
+ 
+https://signalprocessingsociety.org/get-involved/speech-and-language-processing/newsletter/brief-review-nips-2015 
+그림 3: 기계학습의 최근 발전 동향, 기계학습 관련 기사 증가 그래프(좌), 기계학습 관련 
+분야 권위적인 학회인 Advanced Neural Information Processing Systems 의 증가 그래프 (우) 
+
+ 
+
+ 
+
+역사적으로  인공지능  연구자뿐만  아니라  계산이론,  확률통계학,  통계물리학  연구자들에 
+의해서  기계학습은  발전되어왔다.  특히,  딥러닝을  통해서  신경망에  대한  관심이  다시 
+늘어남에  따라  최근  뇌과학,  인지과학,  로보틱스  연구자들이  기계학습  연구에  관심을  갖기 
+시작하였다.  이는  특히  인간수준의  기계지능을  실현하고자  하는  인공지능  연구  관점에서 
+매우 고무적인 일이다. 뇌에서의 학습과 기억에 관한 새로운 발견을 현재의 기계학습 기술을 
+이용하여  모델링함으로써  새로운  인지신경과학적인  발견을  이룰  수  있으며,  이러한  모델링 
+연구는  컴퓨터과학자로  하여금  인간의  학습을  닮은  기계학습  모델을  개발할  수  있게  하는 
+통찰력을 제시해 준다. 컴퓨터과학자들은 인공적인 시스템 구현을 통한 효율적 문제 해결과 
+그  산업적  응용을  개발한다.  수학,  통계학자들은  형식적인  문제  정의,  특성  분석,  계산학적 
+해결 알고리즘을 연구한다. 인지과학자와 계산신경과학자들은 인간의 기억과 학습, 장기기억, 
+단기기억, 언어 능력, 지각 능력, 의사 결정, 행동 학습을 모델링하는데 계산학적 학습 모델을 
+활용한다.  로보틱스는  인간을  닮은  지능과  학습  능력을  가진  기계를  구현함으로써 
+
+뇌인지과학적  모델을  검증하고  실용적인  시스템을  개발한다.  이렇듯  기계학습은  다  학제간 
+융합 연구 분야로 여겨진다. 
+
+</code></pre>
+</div>
+</div>
+<div id="ingest-word" class="section level1">
+<h1><span class="header-section-number">2</span> <code>.docx</code> 워드문서 가져오기</h1>
+<p><code>pip install python-docx</code> 명령어로 파이썬에서 MS 워드 문서를 불러오기 위한 라이브러리를 설치한다. <a href="https://namu.wiki/w/%EC%84%9C%EC%8B%9C(%EC%9C%A4%EB%8F%99%EC%A3%BC)">나무위키 - 서시(윤동주)</a> 내용 일부를 복사하여 “윤동주.docx” 파일명으로 저장을 시킨다. 이를 <code>docx</code> 라이브러리를 사용해서 파이썬에서 자연어 처리를 할 수 있는 텍스트 형태로 가공하여 뽑아낸다.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="im">import</span> docx</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">doc <span class="op">=</span> docx.Document(<span class="st">'data/윤동주.docx'</span>)</a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">word_text <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="cf">for</span> para <span class="kw">in</span> doc.paragraphs:</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">    word_text.append(para.text)</a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="bu">print</span>(word_text)    </a></code></pre></div>
+<pre><code>['무제\xa0\n윤 동 주', '', '\n죽는 날까지 하늘을 우러러\n\n한 점 부끄럼이 없기를,\n\n잎새에 이는 바람에도\n\n나는 괴로워했다.\n\n별을 노래하는 마음으로\n\n모든 죽어 가는 것을 사랑해야지\n\n그리고 나한테 주어진 길을\n\n걸어가야겠다.\n\n\n오늘 밤에도 별이 바람에 스치운다.', '', &quot;의 유고 시집인 '하늘과 바람과 별과 시'의 서시(1941년 11월 20일 작)는 그를 대표하는 시 중의 하나이다. 내용이 짧고 쉬우면서도 사람의 고뇌를 잘 드러낸 시로, 많은 사람들이 시 한 편을 읊으라고 하면 주저없이 선택할 시 중 하나. 실제로 어느 통계의 결과에 의하면, 일반인들에게 가장 좋은 시를 뽑으라고 하면 대중적인 나태주의 &lt;풀꽃&gt;과 김소월의 시 &lt;진달래꽃&gt;등을 뽑은 것에 비해 시인들은 가장 좋은 시를 얘기해 달라고 하면 백이면 백 이 &lt;서시&gt;를 말했다고 한다. 서시의 저력을 볼 수 있는 단면.\n\n아름다운 자연을 단순한 언어로 인간의 고뇌에 비추어낸 윤동주의 대표작. 연세대학교에서는 이 시를 가사로 해서 응원곡에 쓴다.\n\n마지막에 '스치운다'는\xa0\xa0표현으로, 어법에는 '스친다'가\xa0.\n\n\xa0쎄시봉 특집에서,\xa0이 이 시에 곡을 붙여 노래를 불렀다. 가사의 분위기에 맞게 잔잔한 곡을 붙여 불렀는데, 그보다 먼저 서시를 노래로 만들고자 했으나 반대하는 아버지의 말씀을 듣고\xa0차마 곡을 쓰지 못했다던\xa0(윤동주의 육촌 동생)의 말을 듣고는 벙어리가 되고 말았다.\n\n에 두 번 출제되었다. 글쓴이는 현실에서 오는 번뇌와 시련 속에서, 자기 성찰의 자세를 보이며 신념을 다지고 있다.\xa0\n\n'별, 바람' 등의 자연물을 통해 지은이의 생각을 표현하고 있다. 별은 천상세계에 속하고 바람은 지상세계에 있는데, 시 마지막에 가서 별이 바람에 스치는 것은 두 세계사 만나는 것을 상징한다고 볼 수도 있다. 또 '바람'은 시인의 불안과 고통을 상징하기도 한다.\xa0'한 점 부끄럼 없기를 ~ 괴로워했다'이라는 구절을 통해, 시인의 결벽성을 짐작할 수 있다.\xa0'나에게 주어진 길'은 내가 걸어갈 길로, 인생, 운명, 미래의 소명을 가리킨다. '모든 죽어 가는 것을 사랑해야지'라는 구절을 통해, 시인이 다른 사람을 사랑하는 성품임을 짐작할 수 있다.\n\n이 시가\xa0\xa0시절에 한글로 적은 시임에도 현재 일본의 중,고등학교 국어 교과서에도 실릴 정도로 유명한 시이며,\xa0인\xa0에서도 이 시가 등장했다.\n\n떳떳한 삶을 살겠다는 윤동주의 다짐이 그 어떤 작품보다 잘 드러나는 명시로, 죽음이라는 시어가 직접 언급된 때문인지 윤동주를 다룬 다큐멘터리나 영화에서는 결말부를 장식하는 경우가 많다. 대표할 만한 것으로 영화\xa0.\n\n에도 사용되었으며 자동차 광고에 문학 감성을 녹여냈다는 호평과 서시를 상업 용도로 써먹었다는 혹평이 공존한다.\n\n\xa0에서 방영한 '' 특집에서\xa0X\xa0그룹이\xa0를 만들 때 본 시를 인용했다.&quot;, '']</code></pre>
+<p>앞서 제작한 코드를 함수로 <code>get_word_text()</code> 함수로 제작하여 MS 워드 문서를 넣으면 텍스트를 추출하도록 코드를 제작한다.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">def</span> get_word_text(word_filename):</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2">    doc <span class="op">=</span> docx.Document(word_filename)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3">    word_text <span class="op">=</span> []</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">    <span class="cf">for</span> para <span class="kw">in</span> doc.paragraphs:</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">        word_text.append(para.text)</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">    <span class="cf">return</span> <span class="st">'</span><span class="ch">\n</span><span class="st">'</span>.join(word_text)</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">word_text <span class="op">=</span> get_word_text(<span class="st">'data/윤동주.docx'</span>)</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9"><span class="bu">print</span>(word_text)</a></code></pre></div>
+<pre><code>무제 
+윤 동 주
+
+
+죽는 날까지 하늘을 우러러
+
+한 점 부끄럼이 없기를,
+
+잎새에 이는 바람에도
+
+나는 괴로워했다.
+
+별을 노래하는 마음으로
+
+모든 죽어 가는 것을 사랑해야지
+
+그리고 나한테 주어진 길을
+
+걸어가야겠다.
+
+
+오늘 밤에도 별이 바람에 스치운다.
+
+의 유고 시집인 '하늘과 바람과 별과 시'의 서시(1941년 11월 20일 작)는 그를 대표하는 시 중의 하나이다. 내용이 짧고 쉬우면서도 사람의 고뇌를 잘 드러낸 시로, 많은 사람들이 시 한 편을 읊으라고 하면 주저없이 선택할 시 중 하나. 실제로 어느 통계의 결과에 의하면, 일반인들에게 가장 좋은 시를 뽑으라고 하면 대중적인 나태주의 &lt;풀꽃&gt;과 김소월의 시 &lt;진달래꽃&gt;등을 뽑은 것에 비해 시인들은 가장 좋은 시를 얘기해 달라고 하면 백이면 백 이 &lt;서시&gt;를 말했다고 한다. 서시의 저력을 볼 수 있는 단면.
+
+아름다운 자연을 단순한 언어로 인간의 고뇌에 비추어낸 윤동주의 대표작. 연세대학교에서는 이 시를 가사로 해서 응원곡에 쓴다.
+
+마지막에 '스치운다'는  표현으로, 어법에는 '스친다'가 .
+
+ 쎄시봉 특집에서, 이 이 시에 곡을 붙여 노래를 불렀다. 가사의 분위기에 맞게 잔잔한 곡을 붙여 불렀는데, 그보다 먼저 서시를 노래로 만들고자 했으나 반대하는 아버지의 말씀을 듣고 차마 곡을 쓰지 못했다던 (윤동주의 육촌 동생)의 말을 듣고는 벙어리가 되고 말았다.
+
+에 두 번 출제되었다. 글쓴이는 현실에서 오는 번뇌와 시련 속에서, 자기 성찰의 자세를 보이며 신념을 다지고 있다. 
+
+'별, 바람' 등의 자연물을 통해 지은이의 생각을 표현하고 있다. 별은 천상세계에 속하고 바람은 지상세계에 있는데, 시 마지막에 가서 별이 바람에 스치는 것은 두 세계사 만나는 것을 상징한다고 볼 수도 있다. 또 '바람'은 시인의 불안과 고통을 상징하기도 한다. '한 점 부끄럼 없기를 ~ 괴로워했다'이라는 구절을 통해, 시인의 결벽성을 짐작할 수 있다. '나에게 주어진 길'은 내가 걸어갈 길로, 인생, 운명, 미래의 소명을 가리킨다. '모든 죽어 가는 것을 사랑해야지'라는 구절을 통해, 시인이 다른 사람을 사랑하는 성품임을 짐작할 수 있다.
+
+이 시가  시절에 한글로 적은 시임에도 현재 일본의 중,고등학교 국어 교과서에도 실릴 정도로 유명한 시이며, 인 에서도 이 시가 등장했다.
+
+떳떳한 삶을 살겠다는 윤동주의 다짐이 그 어떤 작품보다 잘 드러나는 명시로, 죽음이라는 시어가 직접 언급된 때문인지 윤동주를 다룬 다큐멘터리나 영화에서는 결말부를 장식하는 경우가 많다. 대표할 만한 것으로 영화 .
+
+에도 사용되었으며 자동차 광고에 문학 감성을 녹여냈다는 호평과 서시를 상업 용도로 써먹었다는 혹평이 공존한다.
+
+ 에서 방영한 '' 특집에서 X 그룹이 를 만들 때 본 시를 인용했다.</code></pre>
+</div>
+<div id="ingest-hwp" class="section level1">
+<h1><span class="header-section-number">3</span> <code>.hwp</code> 아래한글 문서 가져오기 <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></h1>
+<p><a href="https://github.com/mete0r/pyhwp">pyhwp</a> 라이브러리가 0.1b12 버젼부터 즉 2019년 4월 8일부터 파이썬3을 지원하기 시작했다. 자세한 사항은 <a href="https://github.com/mete0r/pyhwp/issues/112">Python 3 지원 #112</a>을 참조하여 HWP 파일을 <code>.txt</code> 파일로 변환시킨다.</p>
+<p>먼저 <code>os.system()</code> 메쏘드를 사용해서 쉘명령어를 사용해서 <code>.hwp</code> 파일을 <code>.txt</code> 파일로 변환시킨다. 이제 일반 평문 텍스트로 한글파일이 변환되었기에 이를 파이썬으로 불러 읽어들인다.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="im">import</span> os</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="co">## 쉘에서 `hwp5txt` 변환실행</span></a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">hwp2txt_cmd <span class="op">=</span> <span class="st">'hwp5txt data/발명진흥법.hwp &gt; data/발명진흥법.txt'</span></a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">os.system(hwp2txt_cmd)</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6"></a>
+<a class="sourceLine" id="cb15-7" data-line-number="7"><span class="co">## HWP에서 TXT 변환파일 텍스트 확인</span></a></code></pre></div>
+<pre><code>0</code></pre>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><a class="sourceLine" id="cb17-1" data-line-number="1">hwp_txt <span class="op">=</span> <span class="bu">open</span>(<span class="st">&quot;data/발명진흥법.txt&quot;</span>, <span class="st">&quot;r&quot;</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="bu">print</span>(hwp_txt.read())</a></code></pre></div>
+<pre><code>산업통상자원부 공고 제2014-445호
+  발명진흥법을 개정함에 있어 국민에게 미리 알려 의견을 듣고자 그 개정이유와 주요내용을 행정절차법 제41조에 따라 다음과 같이 공고합니다.
+
+
+
+2014년 9월 12일
+
+                                   산업통상자원부장관
+
+발명진흥법 일부개정법률안 입법예고
+
+1. 개정이유
+  공공데이터의 개방 및 이용확산을 위해 산업재산권정보시스템 운영의 근거규정을 마련하고, 발명진흥업무를 위탁수행하는 민간인을 공무원으로 의제하여 처벌함으로써 민간부패 가능성을 억제하기 위함.
+  또한, 산업재산권진단업무 및 지식재산활동 실태조사 업무의 안정적이고 효과적인 수행을 도모하기 위해 근거규정을 정비하고, 산업재산권분쟁조정제도를 활성화하기 위해서 분쟁조정대상을 확대하며, 지역지식재산센터 등록요건 등 과도한 규제를 개선하기 위함
+
+2. 주요내용
+가. 공공데이터의 제공 및 이용 활성화에 관한 법률 제정 취지에 맞게 누구든지 산업재산권 정보의 이용이 가능하도록 규정을 정비하고 공공데이터의 효율적 제공을 위한 산업재산권정보시스템의 운영근거 규정 등을 마련(안 제20조, 제20조의2 개정)
+
+나. 특허기술정보센터 관련 규정을 삭제하여 산업재산권 정보제공전문기관과의 중복을 해소하고 근거규정을 일원화(안 제20조의3 개정, 제21조 및 제22조 삭제)
+  1) 동 기관을 산업재산권정보화기관으로 명칭을 수정하고, 수행할 수 있는 정보화추진계획 상의 업무범위를 확대
+  2) 삭제되는 특허기술정보센터 규정에 있는 수익사업 및 출연조항을 정보화전문기관 관련조항에 규정
+다. 지식재산활동 실태조사의 효과적인 수행을 위해서 실태조사의 목적, 방법을 구체적으로 규정하고 자료제출 등 협조요청 근거 마련(안 제20조의8 신설)
+
+라. 특허정보활용 및 연구개발 효율화 사업의 근거규정인 산업재산권진단의 분석대상 범위가 협소하여 경제환경의 변화와 연구개발 현장의 수요를 반영하는데 한계가 있어 현실에 맞게 정비(안 제2조 및 제36조 개정)
+
+마. 산업재산권분쟁조정 활성화를 위하여 분쟁조정대상을 확대(안 제41조 및 제43조의2 개정) 
+  1) 산업재산권 출원, 직무발명, 영업비밀 등을 조정대상으로 확대하고
+  2) 권리자뿐만 아니라 출원인, 영업비밀보유자 등도 분쟁조정을 신청할 수 있도록 개정
+
+바. 지역지식재산센터 등록요건 및 발명의 평가기관 지정요건을 완화하고 규제의 재검토 조항을 마련하여 규제개선과제 이행(안 제23조 및 제28조 개정, 제57조의2 신설)
+
+사. 국민권익위원회 권고를 수용하여 발명진흥관련 공무를 수행하는 민간인 처벌시 공무원 의제규정 적용(안 제59조)
+
+3. 의견제출
+   발명진흥법 일부개정법률안에 대해 의견이 있는 기관, 단체 또는 개인은 2014년 10월 22일(수)까지 다음 사항을 기재한 의견서를 특허청장(참조 : 산업재산정책과장)에게 제출하여 주시기 바라며, 입법예고안의 전문을 보고 싶으신 분은 특허청 홈페이지(www.kipo.go.kr&gt;정보마당&gt;법령자료&gt;입법예고)를 참고하시기 바랍니다.
+   가. 입법예고사항에 대한 항목별 의견(찬․반 여부와 그 사유)
+   나. 성명(법인, 단체의 경우 그 명칭과 대표자 성명), 주소 및 전화번호
+   다. 기타 참고사항
+
+  ※ 보내실 곳
+    ㅇ 특허청 산업재산정책과 : 대전광역시 서구 청사로 189 정부대전청사 4동 (우편번호: 302-701)
+       전화: (042)481-8661, Fax: (042)472-3464
+       이메일: nornja@korea.kr
+
+법률  제        호
+
+발명진흥법 일부개정법률안
+
+발명진흥법 일부를 다음과 같이 개정한다.
+제2조제6호를 다음과 같이 한다.
+  6. “산업재산권진단”이란 산업재산권에 대한 종합적인 동향조사와 분석을 실시하여 연구개발 또는 사업화의 방향과 전략 등을 제시하는 것을 말한다.
+제20조제2항에 제5호를 다음과 같이 신설한다.
+  5. 산업재산권 정보시스템의 구축 및 운영
+제20조의2제1항 전단 중 “서비스사업자 등이 신청하면”을 “정보를 이용하고자 하는 자에게”로 하고, 같은 조 제2항 중 “신청인”을 “이용자”로 한다.
+제20조의3의 제목 “(산업재산권 정보의 제공 등에 관한 업무 수행)”을 “(산업재산권 정보화전문기관)”으로 하고, 같은 조 제1항 전단을 다음과 같이 한다.
+  특허청장은 전문기관 또는 단체를 산업재산권 정보화전문기관(이하 “정보화전문기관”이라 한다)으로 지정하여 제20조제2항 각 호에 관한 업무의 전부 또는 일부를 대행하게 할 수 있다.
+제20조의3제2항 중 “전문기관 또는 단체를”을 “정보화전문기관을”로 하고, 같은 조 제3항 중 “전문기관 또는 단체”를 “정보화전문기관”으로 하며, 같은 조에 제4항부터 제6항까지를 각각 다음과 같이 신설한다.
+  ④ 정보화전문기관은 제1항에 따른 사업 수행에 필요한 자금을 충당하기 위하여 수익사업을 할 수 있다.
+  ⑤ 정부는 정보화전문기관의 설립ㆍ운영 또는 사업 수행에 필요한 경비의 전부 또는 일부를 예산의 범위에서 출연할 수 있다.
+  ⑥ 제5항에 따른 출연에 필요한 사항은 대통령령으로 정한다.
+제20조의8을 다음과 같이 신설한다.
+제20조의8(지식재산활동 실태조사) ① 정부는 기업 및 대학ㆍ공공연구기관의 지식재산활동 전반에 관한 현황을 파악하기 위해 매년 정기적으로 실태조사를 실시하고 그 결과를 공표한다.
+  ② 정부는 제1항에 따른 실태조사를 제51조에 따른 한국지식재산연구원 또는 정보화전문기관 등 지식재산 조사ㆍ정보제공 관련 기관에 위탁할 수 있다.
+  ③ 정부는 제1항에 따른 실태조사를 위하여 관련 기관에 자료의 제출 등 협조를 요청할 수 있다.
+제21조 및 제22조를 각각 삭제한다.
+제23조제4항 중 “시설, 인력 및 전산장비를”을 “시설 및 인력 등을”으로 한다.
+제28조제2항 중 “시설, 평가실적 또는 유사업무 경험”을 “시설 등”으로 한다.
+제36조제2항 중 “시설, 진단실적 또는 유사업무 경험”을 “시설”로 하고, 같은 조 제3항 중 “개인발명가 또는 사용자등의 신청에 따라”를 삭제하고, “진단에”를 “대통령령으로 정하는 업무에”로 한다.
+제41조제1항 중 “산업재산권과”를 “다음 각 호와”로 하고, 같은 항에 제1호부터 제4호까지를 각각 다음과 같이 신설한다.
+  1. 산업재산권 출원
+  2. 산업재산권
+  3. 직무발명
+  4. 영업비밀
+제41조제3항제6호 중 “산업재산권”을 “산업재산권, 직무발명 또는 영업비밀”로 한다.
+제43조의2제1항제5호를 제7호로 하고 “실시에”를 “실시 또는 영업비밀과”로, 같은 항 제1호부터 제4호까지를 각각 제2호부터 제5호까지로 한다.
+제43조의2제1항에 제1호 및 제6호를 각각 다음과 같이 신설한다.
+  1. 출원인
+  6. 영업비밀 보유자
+제50조의3제4항 중 “제21조제5항”을 “제20조의3제4항”으로 한다.
+제56조제2항 중 “특허기술정보센터”를 “정보화전문기관”으로 한다.
+제57조제2호를 삭제하고, 같은 조 제3호부터 제5호까지를 각각 제2호부터 제4호까지로 한다.
+제57조의2를 다음과 같이 신설한다.
+제57조의2(규제의 재검토) 특허청장은 다음 각 호의 사항에 대하여 2014년 12월 31일을 기준으로 3년마다(매 3년이 되는 해의 기준일과 같은 날 전까지를 말한다) 그 타당성을 검토하여 개선 등의 조치를 하여야 한다.
+  1. 제23조제3항 내지 제5항에 따른 지역지식재산센터의 등록
+  2. 제24조에 따른 지역지식재산센터의 등록말소
+  3. 제28조에 따른 평가기관의 지정
+  4. 제31조에 따른 평가기관의 지정취소
+  5. 제36조에 따른 산업재산권진단기관의 지정
+  6. 제37조에 따른 산업재산권진단기관의 지정취소
+  7. 제50조의2에 따른 전문기관 또는 단체의 지정 및 지정취소
+  8. 제60조에 따른 과태료 부과
+제59조 중 “특허기술정보센터, 특허기술사업화알선센터 및 한국발명진흥회의 임원과”를 “특허청장으로부터 이 법에 규정된 업무 또는 사업을 위탁받아 수행하는 기관의 임원과 위탁받은 사무에 종사하는”으로 한다.
+제60조제1항제3호를 삭제하고, 같은 항 제4호 및 제5호를 각각 제3호 및 제4호로 한다.
+
+부      칙
+
+제1조(시행일) 이 법은 공포 후 6개월이 경과한 날부터 시행한다.
+제2조(정보화전문기관의 지정에 관한 경과조치) 이 법 시행 전에 종전의 법 제20조의3에 따라 지정된 전문기관 또는 단체와 종전의 법 제21조의 규정에 따라 특허기술정보센터로 등록한자는 법 제20조의3의 개정 규정에 따라 지정된 정보화전문기관으로 본다.
+제3조(과태료에 관한 경과조치) 이 법 시행 전의 행위에 대하여 과태료를 적용할 때에는 종전의 규정에 따른다.
+신ㆍ구조문대비표
+
+&lt;표&gt;
+
+
+
+
+
+
+〈 의안 소관 부서명 〉
+
+&lt;표&gt;</code></pre>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://mytory.net/archives/12797">웹으로 말하기 (2014-03-27), “리눅스에서 한글 파일(hwp) 파일 변환해서 읽기”</a><a href="#fnref1" class="footnote-back">↩</a></p></li>
+<li id="fn2"><p><a href="https://suspected.tistory.com/entry/pyhwp-HWP-%ED%8C%8C%EC%9D%BC%EC%9D%84-%EB%8B%A4%EC%96%91%ED%95%9C-%ED%99%95%EC%9E%A5%EC%9E%90%EB%A1%9C-%EB%B3%80%ED%99%98%ED%95%98%EA%B8%B0">HWP 파일을 다양한 확장자로 변환하기 - 1</a><a href="#fnref2" class="footnote-back">↩</a></p></li>
+</ol>
 </div>
 
 
